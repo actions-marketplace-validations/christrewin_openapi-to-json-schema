@@ -10,18 +10,14 @@ This action retrieves a validated openapi specification from a Telstra origin an
 
 ## Outputs
 
-### `time`
+### `json-schema-path`
 
-The time we greeted you.
-
-### `specificationURL`
-
-The openapi specification url.
+The json schema path & file.
 
 ## Example usage
 
 ```yml
-uses: actions/openapi-to-json-schema@v1
+uses: christrewin/openapi-to-json-schema@v0.0.6
 with:
   specification-url: 'https://dev.telstra.com/sites/default/files/redocs/1620871323/messaging-api-swagger_0.yaml'
 ```

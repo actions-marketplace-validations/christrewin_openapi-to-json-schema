@@ -9,27 +9,25 @@ inputs:
     required: true
     # default: ''
 outputs:
-  time:
-    description: 'The time we processed the request'
-    value: ${{ steps.time-id.outputs.time-id }}
-  specificationURL:
-    description: 'The specification URL that was entered'
-    value: ${{ steps.specification-id.outputs.specification-id }}
+  json-schema-path:
+    description: 'The generated json schema'
+    value: ${{ steps.json-schema-id.outputs.json-schema-path }}
 runs:
   using: 'composite'
   steps:
-    - id: time-id
-      run: |
-        echo "::set-output name=time-id::$(date)"
-      shell: bash
     - id: specification-id
       run: |
-        echo "::set-output name=specification-id::${{ inputs.specification-url }}"
+        echo "action_path: ${{ github.action_path }}" \
+        echo "Generating json schema from openapi specification file ${{ inputs.specification-url }}"
       shell: bash
     - shell: 'bash'
       run: |
-        docker run -u 1001 --rm --workdir /github/workspace -v "$GITHUB_WORKSPACE":"/github/workspace" \
+        docker run -u 1001 --rm --workdir /github/workspace -v "${{ github.action_path }}":"/github/workspace" \
           openapitools/openapi-generator-cli generate \
           -i ${{ inputs.specification-url }} \
           -g openapi \
           -o /github/workspace/openapi
+    - id: json-schema-id
+      run: |
+        echo "::set-output name=json-schema-path::${{ github.action_path }}/openapi.json"
+      shell: bash
