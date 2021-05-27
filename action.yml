@@ -1,5 +1,8 @@
 name: 'openapi to json schema action'
 description: 'Retrieve openapi specification file and return json schema file'
+branding:
+  icon: 'box'
+  color: 'purple'
 inputs:
   specification-url:
     description: 'Specification URL'
