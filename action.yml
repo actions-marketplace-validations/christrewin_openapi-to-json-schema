@@ -1,0 +1,17 @@
+name: 'openapi to json schema action'
+description: 'Retrieve openapi specification file and return json schema file'
+inputs:
+  specification-url:
+    description: 'Specification URL'
+    required: true
+    # default: ''
+outputs:
+  time: # id of output
+    description: 'The time we processed the request'
+  specificationURL:
+    description: 'The specification URL that was entered'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.specification-url }}
