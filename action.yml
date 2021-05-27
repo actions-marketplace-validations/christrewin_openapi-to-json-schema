@@ -9,12 +9,27 @@ inputs:
     required: true
     # default: ''
 outputs:
-  time: # id of output
+  time:
     description: 'The time we processed the request'
+    value: ${{ steps.time-id.outputs.time-id }}
   specificationURL:
     description: 'The specification URL that was entered'
+    value: ${{ steps.specification-id.outputs.specification-id }}
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
-  args:
-    - ${{ inputs.specification-url }}
+  using: 'composite'
+  steps:
+    - id: time-id
+      run: |
+        echo "::set-output name=time-id::$(date)"
+      shell: bash
+    - id: specification-id
+      run: |
+        echo "::set-output name=specification-id::${{ inputs.specification-url }}"
+      shell: bash
+    - shell: 'bash'
+      run: |
+        docker run -u 1001 --rm --workdir /github/workspace -v "$GITHUB_WORKSPACE":"/github/workspace" \
+          openapitools/openapi-generator-cli generate \
+          -i ${{ inputs.specification-url }} \
+          -g openapi \
+          -o /github/workspace/openapi
