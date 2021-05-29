@@ -21,12 +21,12 @@ runs:
       shell: bash
     - shell: bash
       run: |
-        docker run -u 1001 --rm --workdir /github/workspace -v "$GITHUB_WORKSPACE":"/github/workspace" \
+        docker run -u 1001 --rm --workdir ${{ github.workspace }} -v "${{ github.workspace }}":"${{ github.workspace }}" \
           openapitools/openapi-generator-cli generate \
           -i ${{ inputs.specification-url }} \
           -g openapi \
-          -o /github/workspace/openapi
+          -o ${{ github.workspace }}/openapi
     - id: json-schema-id
       run: |
-        echo "::set-output name=json-schema-path::$GITHUB_WORKSPACE/openapi.json"
+        echo "::set-output name=json-schema-path::${{ github.workspace }}/openapi.json"
       shell: bash
