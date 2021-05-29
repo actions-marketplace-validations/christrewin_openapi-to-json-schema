@@ -9,9 +9,9 @@ inputs:
     required: true
     # default: ''
 outputs:
-  json-schema-path:
-    description: 'The generated json schema'
-    value: ${{ steps.json-schema-id.outputs.json-schema-path }}
+  json-schema-file:
+    description: 'The generated json schema file'
+    value: ${{ steps.schema-id.outputs.json-schema-file }}
 runs:
   using: composite
   steps:
@@ -26,7 +26,7 @@ runs:
           -i ${{ inputs.specification-url }} \
           -g openapi \
           -o ${{ github.workspace }}/openapi
-    - id: json-schema-id
+    - id: schema-id
       run: |
-        echo "::set-output name=json-schema-path::${{ github.workspace }}/openapi.json"
+        echo "::set-output name=json-schema-file::openapi.json"
       shell: bash
